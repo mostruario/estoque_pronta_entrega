@@ -44,9 +44,10 @@ def index():
     return render_template('index.html', produtos=produtos)
 
 
-if __name__ == '__main__':
-    # Executa o app acessível na rede local
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Porta dinâmica exigida pelo Render
+    app.run(host='0.0.0.0', port=port)
+
 
 
 
