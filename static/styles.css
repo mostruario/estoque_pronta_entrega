@@ -20,34 +20,39 @@ h1 {
 
 .card {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 320px; /* aumentamos o tamanho */
-    padding: 20px;
+    width: 340px; /* mais largo */
+    overflow: hidden; /* impede que conteúdo saia do card */
     text-align: left;
     transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
     transform: scale(1.03);
 }
 
+/* imagem preenche o card */
 .card img {
     width: 100%;
-    height: 250px; /* imagem maior */
-    object-fit: contain; /* evita cortes */
-    border-radius: 10px;
-    background-color: #f2f2f2;
+    height: 300px; /* ajusta a altura */
+    object-fit: cover; /* preenche o espaço sem deixar borda */
+    border-bottom: 2px solid #eee;
 }
 
 .card h2 {
     font-size: 1.1em;
     color: #333;
-    margin: 10px 0 5px;
+    margin: 12px 15px 4px;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .card p {
     font-size: 0.95em;
-    color: #666;
-    margin: 3px 0;
+    color: #555;
+    margin: 2px 15px 10px;
+    line-height: 1.4;
 }
