@@ -50,6 +50,14 @@ def index():
         else:
             imagem_url = url_for('static', filename='sem_imagem.png')
 
+        # 🔹 Formata valores em reais (R$)
+        def formatar_real(valor):
+            try:
+                valor_float = float(valor)
+                return f"R$ {valor_float:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+            except:
+                return str(valor)
+
         produtos.append({
             "DESCRICAO_PRODUTO": str(row.get("DESCRICAO_PRODUTO", "")),
             "MARCA": str(row.get("MARCA", "")),
@@ -57,8 +65,8 @@ def index():
             "LARGURA": str(row.get("LARGURA", "")),
             "ALTURA": str(row.get("ALTURA", "")),
             "DIAMETRO": str(row.get("DIAMETRO", "")),
-            "DE": str(row.get("DE", "")),
-            "POR": str(row.get("POR", "")),
+            "DE": formatar_real(row.get("DE", "")),
+            "POR": formatar_real(row.get("POR", "")),
             "CODIGO_PRODUTO": str(row.get("CODIGO_PRODUTO", "")),
             "ESTOQUE": str(row.get("ESTOQUE", "")),
             "IMAGEM_PRODUTO": imagem_url

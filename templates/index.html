@@ -40,10 +40,15 @@
         <div class="info">
             <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
             <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
-            <p><strong>Comprimento:</strong> {{ produto.COMPRIMENTO }}</p>
-            <p><strong>Largura:</strong> {{ produto.LARGURA }}</p>
-            <p><strong>Altura:</strong> {{ produto.ALTURA }}</p>
-            <p><strong>Diâmetro:</strong> {{ produto.DIAMETRO }}</p>
+
+            <!-- 🔹 Medidas em linha única -->
+            <p class="info-medidas">
+                Comp.: {{ produto.COMPRIMENTO }} | 
+                Larg.: {{ produto.LARGURA }} | 
+                Alt.: {{ produto.ALTURA }} | 
+                Ø Diâm.: {{ produto.DIAMETRO }}
+            </p>
+
             <p><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
             <p><strong>De:</strong> {{ produto.DE }}</p>
             <p><strong>Por:</strong> <span class="preco">{{ produto.POR }}</span></p>
