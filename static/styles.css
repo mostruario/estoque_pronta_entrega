@@ -245,30 +245,18 @@ h1 {
 /* Responsivo: telas até 768px (celulares/tablets) */
 @media (max-width: 768px) {
     .container {
-        grid-template-columns: 1fr;
-        row-gap: 40px;
+        grid-template-columns: 1fr; /* 1 card por linha */
+        row-gap: 30px;
     }
 
     .card {
-        max-width: 90%;
+        max-width: 100%;
+        width: 100%;
         height: auto;
     }
 
-    /* 🔹 Filtros responsivos */
-    .filtros-form {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
     .filtro-item {
-        width: 100%;
-        justify-content: flex-start;
-    }
-
-    .filtro-item select,
-    .filtro-item input {
-        min-width: 100%;
-        box-sizing: border-box;
+        flex: 1 1 100%; /* filtros ocupam toda a largura */
+        flex-direction: column; /* label em cima do input/select */
     }
 }
