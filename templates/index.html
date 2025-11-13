@@ -7,29 +7,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <!-- 🔹 Logo no topo -->
-  <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo" style="height:30px; margin-bottom:15px;">
+    <!-- 🔹 Logo no canto superior direito -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+    </div>
 
-    <h1>Catálogo - Pronta Entrega</h1>
+    <div class="header-container">
+        <h1>Catálogo - Pronta Entrega</h1>
 
-    <!-- 🔹 Filtros modernos -->
-    <div class="filtros">
-        <form method="get" action="/" class="filtros-form">
-            <div class="filtro-item">
-                <label for="marca">Marca:</label>
-                <select name="marca" id="marca" onchange="this.form.submit()">
-                    <option value="">Todas</option>
-                    {% for marca in marcas %}
-                        <option value="{{ marca }}" {% if marca == filtro_marca %}selected{% endif %}>{{ marca }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <!-- 🔹 Filtros modernos -->
+        <div class="filtros">
+            <form method="get" action="/" class="filtros-form">
+                <div class="filtro-item">
+                    <label for="marca">Marca:</label>
+                    <select name="marca" id="marca" onchange="this.form.submit()">
+                        <option value="">Todas</option>
+                        {% for marca in marcas %}
+                            <option value="{{ marca }}" {% if marca == filtro_marca %}selected{% endif %}>{{ marca }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <div class="filtro-item">
-                <label for="pesquisa">Pesquisar Produto:</label>
-                <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto" oninput="this.form.submit()">
-            </div>
-        </form>
+                <div class="filtro-item">
+                    <label for="pesquisa">Pesquisar Produto:</label>
+                    <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto" oninput="this.form.submit()">
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="container">
@@ -50,10 +54,10 @@
             <!-- 🔹 Medidas apenas se diferentes de 0 -->
             <p class="info-medidas">
                 {% set medidas = [] %}
-                {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ produto.COMPRIMENTO) %}{% endif %}
-                {% if produto.LARGURA|float != 0 %}{% set _ = medidas.append('Larg.: ' ~ produto.LARGURA) %}{% endif %}
-                {% if produto.ALTURA|float != 0 %}{% set _ = medidas.append('Alt.: ' ~ produto.ALTURA) %}{% endif %}
-                {% if produto.DIAMETRO|float != 0 %}{% set _ = medidas.append('Ø Diâm.: ' ~ produto.DIAMETRO) %}{% endif %}
+                {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ '%.2f'|format(produto.COMPRIMENTO|float)|replace('.00','')) %}{% endif %}
+                {% if produto.LARGURA|float != 0 %}{% set _ = medidas.append('Larg.: ' ~ '%.2f'|format(produto.LARGURA|float)|replace('.00','')) %}{% endif %}
+                {% if produto.ALTURA|float != 0 %}{% set _ = medidas.append('Alt.: ' ~ '%.2f'|format(produto.ALTURA|float)|replace('.00','')) %}{% endif %}
+                {% if produto.DIAMETRO|float != 0 %}{% set _ = medidas.append('Ø Diâm.: ' ~ '%.2f'|format(produto.DIAMETRO|float)|replace('.00','')) %}{% endif %}
                 {{ medidas | join(' | ') }}
             </p>
 
@@ -102,4 +106,3 @@ modal.addEventListener("click", function(e) {
 
 </body>
 </html>
-
