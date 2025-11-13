@@ -9,20 +9,23 @@
 <body>
     <h1>Catálogo - Pronta Entrega</h1>
 
-    <!-- 🔹 Filtros -->
+    <!-- 🔹 Filtros modernos -->
     <div class="filtros">
-        <form method="get" action="/">
-            <label for="marca">Marca:</label>
-            <select name="marca" id="marca" onchange="this.form.submit()">
-                <option value="">Todas</option>
-                {% for marca in marcas %}
-                    <option value="{{ marca }}" {% if marca == filtro_marca %}selected{% endif %}>{{ marca }}</option>
-                {% endfor %}
-            </select>
+        <form method="get" action="/" class="filtros-form">
+            <div class="filtro-item">
+                <label for="marca">Marca:</label>
+                <select name="marca" id="marca" onchange="this.form.submit()">
+                    <option value="">Todas</option>
+                    {% for marca in marcas %}
+                        <option value="{{ marca }}" {% if marca == filtro_marca %}selected{% endif %}>{{ marca }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <label for="pesquisa">Pesquisar Produto:</label>
-            <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto">
-            <button type="submit">Buscar</button>
+            <div class="filtro-item">
+                <label for="pesquisa">Pesquisar Produto:</label>
+                <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto" oninput="this.form.submit()">
+            </div>
         </form>
     </div>
 
