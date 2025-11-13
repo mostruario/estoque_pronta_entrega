@@ -2,78 +2,46 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Catálogo - Pronta Entrega</title>
+    <title>Estoque - Pronta Entrega</title>
     <style>
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f3f4f6;
-            margin: 0;
-        }
-        header {
-            background: #1f2937;
-            color: white;
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
             padding: 20px;
-            text-align: center;
-            font-size: 22px;
-            letter-spacing: 1px;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            padding: 30px;
+        .produto {
+            display: inline-block;
+            width: 250px;
+            background: #fff;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            vertical-align: top;
         }
-        .card {
-            background: white;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease;
-        }
-        .card:hover {
-            transform: scale(1.03);
-        }
-        .card img {
+        .produto img {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            border-bottom: 1px solid #ddd;
+            border-radius: 8px;
         }
-        .info {
-            padding: 15px;
-        }
-        .info h3 {
-            margin: 0;
-            font-size: 18px;
-            color: #111827;
-        }
-        .info p {
-            color: #4b5563;
-            margin: 5px 0;
-            font-size: 14px;
+        .descricao {
+            margin-top: 10px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <header>🛋️ Catálogo de Produtos - Pronta Entrega</header>
-
-    <div class="grid">
-        {% for p in produtos %}
-        <div class="card">
-            {% if p['LINK_IMAGEM'] %}
-                <img src="{{ url_for('static', filename=p['LINK_IMAGEM']) }}" alt="Imagem do produto">
-            {% else %}
-                <img src="{{ url_for('static', filename='sem_foto.jpg') }}" alt="Sem imagem disponível">
+    <h1>Estoque Pronta Entrega</h1>
+    {% for p in produtos %}
+        <div class="produto">
+            {% if p.LINK_IMAGEM %}
+                <img src="{{ url_for('static', filename=p.LINK_IMAGEM) }}" alt="{{ p['DESCRIÇÃO DO PRODUTO'] }}">
             {% endif %}
-            <div class="info">
-                <h3>{{ p['DESCRIÇÃO DO PRODUTO'] }}</h3>
-                <p><b>Marca:</b> {{ p['MARCA'] }}</p>
-                <p><b>Código:</b> {{ p['CÓDIGO DO PRODUTO'] }}</p>
-                <p><b>Estoque:</b> {{ p['ESTOQUE DISPONIVEL'] }}</p>
-            </div>
+            <div class="descricao">{{ p['DESCRIÇÃO DO PRODUTO'] }}</div>
+            <div>{{ p.MARCA }}</div>
         </div>
-        {% endfor %}
-    </div>
+    {% endfor %}
 </body>
 </html>
 
