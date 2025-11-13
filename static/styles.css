@@ -255,23 +255,30 @@ h1 {
         height: auto;
     }
 
-    /* 🔹 Filtros no celular alinhados à esquerda */
     .filtros-form {
-        flex-direction: column; /* filtros em coluna */
-        align-items: flex-start; /* alinhamento à esquerda */
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-start; /* filtros alinhados à esquerda */
         width: 100%;
+        box-sizing: border-box;
     }
 
     .filtro-item {
-        flex: 1 1 100%; /* ocupa toda a largura */
-        flex-direction: column; /* label em cima do input/select */
-        align-items: flex-start; /* força alinhamento à esquerda */
-        margin-bottom: 10px;
+        flex: 1 1 100%;       /* cada filtro ocupa toda a largura disponível */
+        min-width: 0;
+        flex-direction: column; /* label acima do input/select */
+        align-items: flex-start; /* mantém à esquerda */
     }
 
-    /* Espaço extra entre logo e título no celular */
+    .filtro-item select,
+    .filtro-item input {
+        width: 100%;          /* caixas ocupam toda a largura */
+    }
+
+    /* Ajusta margem do título em celulares para afastar do logo */
     h1 {
-        margin-top: 20px;
+        margin-top: 15px;
     }
 }
 
