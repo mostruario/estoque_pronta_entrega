@@ -33,13 +33,13 @@ h1 {
 /* Container de cards */
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px 20px; /* row-gap e column-gap */
+    grid-template-columns: repeat(5, 1fr); /* sempre 5 cards por linha */
+    gap: 20px;
     justify-items: center;
     padding: 30px 15px;
-    width: 100%; /* ocupa toda a tela */
-    max-width: 90%; /* mantém limite máximo */
-    margin: 0 auto; /* centraliza o container */
+    width: 100%;
+    max-width: 1400px; /* limita o tamanho máximo para não esticar demais */
+    margin: 0 auto;
     box-sizing: border-box;
 }
 
@@ -235,6 +235,13 @@ h1 {
     font-size: 12px; 
 }
 
+/* Responsivo: telas até 1200px */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    }
+}
+
 /* Responsivo: telas até 768px (celulares/tablets) */
 @media (max-width: 768px) {
     .container {
@@ -245,5 +252,23 @@ h1 {
     .card {
         max-width: 90%;
         height: auto;
+    }
+
+    /* 🔹 Filtros responsivos */
+    .filtros-form {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .filtro-item {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .filtro-item select,
+    .filtro-item input {
+        min-width: 100%;
+        box-sizing: border-box;
     }
 }
