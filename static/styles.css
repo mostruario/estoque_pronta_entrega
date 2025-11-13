@@ -31,7 +31,7 @@ h1 {
     padding: 20px;
     width: 100%;
     max-width: 235px; /* meio-termo entre 220px e 250px */
-    height: 520px; 
+    height: 580px; /* aumento da altura para caber todas as informações */
     text-align: left;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
@@ -222,4 +222,3 @@ h1 {
 .filtro-item select option {
     font-size: 12px; 
 }
-

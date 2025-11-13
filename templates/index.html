@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <!-- 🔹 Logo no topo -->
+  <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo" style="height:30px; margin-bottom:15px;">
+
     <h1>Catálogo - Pronta Entrega</h1>
 
     <!-- 🔹 Filtros modernos -->
@@ -44,15 +47,17 @@
             <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
             <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
 
-            <!-- Medidas -->
+            <!-- 🔹 Medidas apenas se diferentes de 0 -->
             <p class="info-medidas">
-                Comp.: {{ produto.COMPRIMENTO }} | 
-                Larg.: {{ produto.LARGURA }} | 
-                Alt.: {{ produto.ALTURA }} | 
-                Ø Diâm.: {{ produto.DIAMETRO }}
+                {% set medidas = [] %}
+                {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ produto.COMPRIMENTO) %}{% endif %}
+                {% if produto.LARGURA|float != 0 %}{% set _ = medidas.append('Larg.: ' ~ produto.LARGURA) %}{% endif %}
+                {% if produto.ALTURA|float != 0 %}{% set _ = medidas.append('Alt.: ' ~ produto.ALTURA) %}{% endif %}
+                {% if produto.DIAMETRO|float != 0 %}{% set _ = medidas.append('Ø Diâm.: ' ~ produto.DIAMETRO) %}{% endif %}
+                {{ medidas | join(' | ') }}
             </p>
 
-            <!-- Preços modernos -->
+            <!-- 🔹 Preços modernos -->
             <div class="precos">
                 {% if produto.DE %}
                     <span class="de">De: R$ {{ produto.DE }}</span>
@@ -60,7 +65,7 @@
                 <span class="por">Por: R$ {{ produto.POR }}</span>
             </div>
 
-            <p class="estoque"><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
+            <p class="estoque"><strong>Quantidade:</strong> {{ produto.ESTOQUE }}</p>
         </div>
     </div>
     {% endfor %}
@@ -97,3 +102,4 @@ modal.addEventListener("click", function(e) {
 
 </body>
 </html>
+

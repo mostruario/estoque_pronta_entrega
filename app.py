@@ -41,7 +41,13 @@ def index():
         df = df[df["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa)]
 
     produtos = []
+    codigos_vistos = set()  # 🔹 Evita duplicação de cards
     for _, row in df.iterrows():
+        codigo_produto = str(row.get("CODIGO_PRODUTO", ""))
+        if codigo_produto in codigos_vistos:
+            continue  # pula se o código já foi adicionado
+        codigos_vistos.add(codigo_produto)
+
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
         if imagem_path:
             nome_imagem = os.path.basename(imagem_path)
@@ -67,7 +73,7 @@ def index():
             "DIAMETRO": str(row.get("DIAMETRO", "")),
             "DE": formatar_real(row.get("DE", "")),
             "POR": formatar_real(row.get("POR", "")),
-            "CODIGO_PRODUTO": str(row.get("CODIGO_PRODUTO", "")),
+            "CODIGO_PRODUTO": codigo_produto,
             "ESTOQUE": str(row.get("ESTOQUE", "")),
             "IMAGEM_PRODUTO": imagem_url
         })
@@ -84,6 +90,7 @@ def index():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)
+
 
 
 
