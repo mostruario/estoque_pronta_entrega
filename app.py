@@ -31,12 +31,15 @@ def index():
     for _, row in df.iterrows():
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
 
-        # Se o caminho for algo como "P:\PRODUTO_PRONTA_ENTREGA\static\IMAGENS_PRODUTOS\SOFA SONETO_379922_379923.jpg"
-        # Pegamos apenas o nome do arquivo:
         if imagem_path:
+            # Extrai apenas o nome do arquivo (independente do sistema)
             nome_imagem = os.path.basename(imagem_path)
+            nome_imagem = nome_imagem.replace("\\", "/").split("/")[-1]
+
+            # Caminho final acessível no Flask/Render
             imagem_url = url_for('static', filename=f'IMAGENS_PRODUTOS/{nome_imagem}')
         else:
+            # Imagem padrão se não houver link
             imagem_url = url_for('static', filename='sem_imagem.png')
 
         produtos.append({
@@ -49,6 +52,8 @@ def index():
 
 
 if __name__ == "__main__":
-    # Para rodar localmente
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    # Para rodar localmente e no Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
+
 
