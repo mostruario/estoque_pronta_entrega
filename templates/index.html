@@ -30,9 +30,9 @@
     {% for produto in produtos %}
     <div class="card">
         {% if produto.IMAGEM_PRODUTO %}
-            <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}">
+            <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}" class="zoomable">
         {% else %}
-            <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem">
+            <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem" class="zoomable">
         {% endif %}
 
         <h2>{{ produto.DESCRICAO_PRODUTO }}</h2>
@@ -41,7 +41,7 @@
             <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
             <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
 
-            <!-- 🔹 Medidas em linha única -->
+            <!-- Medidas -->
             <p class="info-medidas">
                 Comp.: {{ produto.COMPRIMENTO }} | 
                 Larg.: {{ produto.LARGURA }} | 
@@ -49,13 +49,48 @@
                 Ø Diâm.: {{ produto.DIAMETRO }}
             </p>
 
-            <p><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
-            <p><strong>De:</strong> {{ produto.DE }}</p>
-            <p><strong>Por:</strong> <span class="preco">{{ produto.POR }}</span></p>
+            <!-- Preços modernos -->
+            <div class="precos">
+                {% if produto.DE %}
+                    <span class="de">De: R$ {{ produto.DE }}</span>
+                {% endif %}
+                <span class="por">Por: R$ {{ produto.POR }}</span>
+            </div>
+
+            <p class="estoque"><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<!-- Modal para zoom -->
+<div id="modal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modal-img">
+</div>
+
+<script>
+const modal = document.getElementById("modal");
+const modalImg = document.getElementById("modal-img");
+const zoomableImages = document.querySelectorAll(".zoomable");
+
+zoomableImages.forEach(img => {
+    img.addEventListener("click", function() {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    });
+});
+
+document.querySelector(".close").addEventListener("click", function() {
+    modal.style.display = "none";
+});
+
+modal.addEventListener("click", function(e) {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+</script>
 
 </body>
 </html>
