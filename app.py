@@ -15,7 +15,7 @@ def index():
     # Lê a planilha (linha 2 é o cabeçalho)
     df = pd.read_excel(EXCEL_FILE, header=1)
 
-    # Limpa e renomeia as colunas
+    # Limpa e renomeia colunas
     df.columns = df.columns.str.strip()
     df.rename(columns={
         "DESCRIÇÃO DO PRODUTO": "PRODUTO",
@@ -36,9 +36,9 @@ def index():
     for _, row in df.iterrows():
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
 
-        # Garante que a imagem seja lida corretamente
+        # ✅ Mantém o mesmo método de antes para funcionar no Render
         if imagem_path:
-            nome_imagem = os.path.basename(imagem_path)
+            nome_imagem = os.path.basename(imagem_path).replace("\\", "/")
             imagem_url = url_for('static', filename=f'IMAGENS_PRODUTOS/{nome_imagem}')
         else:
             imagem_url = url_for('static', filename='sem_imagem.png')
