@@ -1,45 +1,95 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 40px;
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* ===== TÍTULO PRINCIPAL ===== */
 h1 {
-    text-align: left;
-    font-size: 28px;
-    margin-bottom: 25px;
-}
-
-.container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    padding: 15px;
-    width: 220px;
     text-align: center;
+    padding: 25px 10px;
+    font-size: 2rem;
+    background-color: #f8f8f8;
+    border-bottom: 2px solid #ddd;
+    color: #333;
 }
 
+/* ===== CONTAINER DE PRODUTOS ===== */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 30px;
+    background-color: #fafafa;
+}
+
+/* ===== CARD DO PRODUTO ===== */
+.card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== IMAGEM ===== */
 .card img {
     width: 100%;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 10px;
+    height: 230px;
+    object-fit: cover;
+    background-color: #f4f4f4;
 }
 
-.card h2 {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 5px 0;
+/* ===== INFO DO PRODUTO ===== */
+.info {
+    padding: 15px 18px;
+    color: #333;
 }
 
-.card p {
-    color: #555;
-    font-size: 14px;
-    margin: 0;
+.titulo {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #222;
+}
+
+.info p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+.info hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+}
+
+/* ===== PREÇOS ===== */
+.info p strong {
+    color: #111;
+}
+
+.info p strong::after {
+    content: " ";
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 600px) {
+    .card img {
+        height: 180px;
+    }
+    .titulo {
+        font-size: 1rem;
+    }
+    .info {
+        padding: 12px;
+    }
 }
