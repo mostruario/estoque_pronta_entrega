@@ -7,21 +7,50 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Estoque Pronta Entrega</h1>
+    <h1>Catálogo - Pronta Entrega</h1>
+
+    <!-- 🔹 Filtros -->
+    <div class="filtros">
+        <form method="get" action="/">
+            <label for="marca">Marca:</label>
+            <select name="marca" id="marca" onchange="this.form.submit()">
+                <option value="">Todas</option>
+                {% for marca in marcas %}
+                    <option value="{{ marca }}" {% if marca == filtro_marca %}selected{% endif %}>{{ marca }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="pesquisa">Pesquisar Produto:</label>
+            <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
 
     <div class="container">
-        {% for produto in produtos %}
-        <div class="card">
-            {% if produto.IMAGEM_PRODUTO %}
-                <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.PRODUTO }}">
-            {% else %}
-                <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem">
-            {% endif %}
-            <h2>{{ produto.PRODUTO }}</h2>
-            <p>{{ produto.MARCA }}</p>
+    {% for produto in produtos %}
+    <div class="card">
+        {% if produto.IMAGEM_PRODUTO %}
+            <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}">
+        {% else %}
+            <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem">
+        {% endif %}
+
+        <h2>{{ produto.DESCRICAO_PRODUTO }}</h2>
+
+        <div class="info">
+            <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
+            <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
+            <p><strong>Comprimento:</strong> {{ produto.COMPRIMENTO }}</p>
+            <p><strong>Largura:</strong> {{ produto.LARGURA }}</p>
+            <p><strong>Altura:</strong> {{ produto.ALTURA }}</p>
+            <p><strong>Diâmetro:</strong> {{ produto.DIAMETRO }}</p>
+            <p><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
+            <p><strong>De:</strong> {{ produto.DE }}</p>
+            <p><strong>Por:</strong> <span class="preco">{{ produto.POR }}</span></p>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
+</div>
+
 </body>
 </html>
-
