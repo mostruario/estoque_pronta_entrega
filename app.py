@@ -15,45 +15,36 @@ def index():
     # Lê a planilha (linha 2 é o cabeçalho)
     df = pd.read_excel(EXCEL_FILE, header=1)
 
-    # Limpa e renomeia colunas
+    # Limpa e renomeia as colunas
     df.columns = df.columns.str.strip()
     df.rename(columns={
         "DESCRIÇÃO DO PRODUTO": "PRODUTO",
         "MARCA": "MARCA",
-        "COMPRIMENTO": "COMPRIMENTO",
-        "LARGURA": "LARGURA",
-        "ALTURA": "ALTURA",
-        "DIÂMETRO": "DIAMETRO",
-        "DE": "DE",
-        "POR": "POR",
-        "CÓDIGO DO PRODUTO": "CODIGO",
-        "ESTOQUE DISPONIVEL": "ESTOQUE",
         "LINK_IMAGEM": "IMAGEM_PRODUTO"
     }, inplace=True)
+
+    if "PRODUTO" not in df.columns:
+        return "Erro: coluna 'PRODUTO' não encontrada no arquivo Excel."
 
     produtos = []
 
     for _, row in df.iterrows():
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
 
-        # ✅ Mantém o mesmo método de antes para funcionar no Render
         if imagem_path:
-            nome_imagem = os.path.basename(imagem_path).replace("\\", "/")
+            # Extrai apenas o nome do arquivo (independente do sistema)
+            nome_imagem = os.path.basename(imagem_path)
+            nome_imagem = nome_imagem.replace("\\", "/").split("/")[-1]
+
+            # Caminho final acessível no Flask/Render
             imagem_url = url_for('static', filename=f'IMAGENS_PRODUTOS/{nome_imagem}')
         else:
+            # Imagem padrão se não houver link
             imagem_url = url_for('static', filename='sem_imagem.png')
 
         produtos.append({
-            "MARCA": str(row.get("MARCA", "")),
             "PRODUTO": str(row.get("PRODUTO", "")),
-            "COMPRIMENTO": str(row.get("COMPRIMENTO", "")),
-            "LARGURA": str(row.get("LARGURA", "")),
-            "ALTURA": str(row.get("ALTURA", "")),
-            "DIAMETRO": str(row.get("DIAMETRO", "")),
-            "DE": str(row.get("DE", "")),
-            "POR": str(row.get("POR", "")),
-            "CODIGO": str(row.get("CODIGO", "")),
-            "ESTOQUE": str(row.get("ESTOQUE", "")),
+            "MARCA": str(row.get("MARCA", "")),
             "IMAGEM_PRODUTO": imagem_url
         })
 
@@ -61,7 +52,8 @@ def index():
 
 
 if __name__ == "__main__":
-    # Para rodar localmente
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    # Para rodar localmente e no Render
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
 
 

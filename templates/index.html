@@ -1,30 +1,25 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estoque Pronta Entrega</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Estoque Pronta Entrega</h1>
 
-    <div class="produtos-container">
+    <div class="container">
         {% for produto in produtos %}
-            <div class="produto-card">
+        <div class="card">
+            {% if produto.IMAGEM_PRODUTO %}
                 <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.PRODUTO }}">
-                <div class="info">
-                    <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
-                    <p><strong>Descrição do Produto:</strong> {{ produto.PRODUTO }}</p>
-                    <p><strong>Comprimento:</strong> {{ produto.COMPRIMENTO }}</p>
-                    <p><strong>Largura:</strong> {{ produto.LARGURA }}</p>
-                    <p><strong>Altura:</strong> {{ produto.ALTURA }}</p>
-                    <p><strong>Diâmetro:</strong> {{ produto.DIAMETRO }}</p>
-                    <p><strong>De:</strong> {{ produto.DE }}</p>
-                    <p><strong>Por:</strong> {{ produto.POR }}</p>
-                    <p><strong>Código:</strong> {{ produto.CODIGO }}</p>
-                    <p><strong>Estoque disponível:</strong> {{ produto.ESTOQUE }}</p>
-                </div>
-            </div>
+            {% else %}
+                <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem">
+            {% endif %}
+            <h2>{{ produto.PRODUTO }}</h2>
+            <p>{{ produto.MARCA }}</p>
+        </div>
         {% endfor %}
     </div>
 </body>
