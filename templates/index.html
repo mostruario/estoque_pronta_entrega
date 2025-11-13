@@ -2,47 +2,26 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Estoque - Pronta Entrega</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fafafa;
-            padding: 20px;
-        }
-        .produto {
-            display: inline-block;
-            width: 250px;
-            background: #fff;
-            margin: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            vertical-align: top;
-        }
-        .produto img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .descricao {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque Pronta Entrega</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Estoque Pronta Entrega</h1>
-    {% for p in produtos %}
-        <div class="produto">
-            {% if p.LINK_IMAGEM %}
-                <img src="{{ url_for('static', filename=p.LINK_IMAGEM) }}" alt="{{ p['DESCRIÇÃO DO PRODUTO'] }}">
+
+    <div class="container">
+        {% for produto in produtos %}
+        <div class="card">
+            {% if produto.IMAGEM_PRODUTO %}
+                <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.PRODUTO }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem">
             {% endif %}
-            <div class="descricao">{{ p['DESCRIÇÃO DO PRODUTO'] }}</div>
-            <div>{{ p.MARCA }}</div>
+            <h2>{{ produto.PRODUTO }}</h2>
+            <p>{{ produto.MARCA }}</p>
         </div>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </body>
 </html>
-
 
