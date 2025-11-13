@@ -255,8 +255,23 @@ h1 {
         height: auto;
     }
 
+    /* 🔹 Filtros no celular alinhados à esquerda */
+    .filtros-form {
+        flex-direction: column; /* filtros em coluna */
+        align-items: flex-start; /* alinhamento à esquerda */
+        width: 100%;
+    }
+
     .filtro-item {
-        flex: 1 1 100%; /* filtros ocupam toda a largura */
+        flex: 1 1 100%; /* ocupa toda a largura */
         flex-direction: column; /* label em cima do input/select */
+        align-items: flex-start; /* força alinhamento à esquerda */
+        margin-bottom: 10px;
+    }
+
+    /* Espaço extra entre logo e título no celular */
+    h1 {
+        margin-top: 20px;
     }
 }
+
