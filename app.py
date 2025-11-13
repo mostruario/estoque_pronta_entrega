@@ -26,25 +26,29 @@ def index():
     if "PRODUTO" not in df.columns:
         return "Erro: coluna 'PRODUTO' não encontrada no arquivo Excel."
 
-    produtos = []
+        produtos = []
 
     for _, row in df.iterrows():
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
 
         if imagem_path:
-            # Extrai apenas o nome do arquivo (independente do sistema)
             nome_imagem = os.path.basename(imagem_path)
             nome_imagem = nome_imagem.replace("\\", "/").split("/")[-1]
-
-            # Caminho final acessível no Flask/Render
             imagem_url = url_for('static', filename=f'IMAGENS_PRODUTOS/{nome_imagem}')
         else:
-            # Imagem padrão se não houver link
             imagem_url = url_for('static', filename='sem_imagem.png')
 
         produtos.append({
-            "PRODUTO": str(row.get("PRODUTO", "")),
-            "MARCA": str(row.get("MARCA", "")),
+            "PRODUTO": str(row.get("PRODUTO", "")).strip(),
+            "MARCA": str(row.get("MARCA", "")).strip(),
+            "COMPRIMENTO": str(row.get("COMPRIMENTO", "")).strip(),
+            "LARGURA": str(row.get("LARGURA", "")).strip(),
+            "ALTURA": str(row.get("ALTURA", "")).strip(),
+            "DIAMETRO": str(row.get("DIÂMETRO", row.get("DIAMETRO", ""))).strip(),
+            "DE": str(row.get("DE", "")).strip(),
+            "POR": str(row.get("POR", "")).strip(),
+            "CODIGO": str(row.get("CÓDIGO", row.get("CODIGO", ""))).strip(),
+            "ESTOQUE": str(row.get("ESTOQUE DISPONÍVEL", row.get("ESTOQUE_DISPONIVEL", ""))).strip(),
             "IMAGEM_PRODUTO": imagem_url
         })
 
