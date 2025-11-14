@@ -20,7 +20,7 @@
             <form method="get" action="/" class="filtros-form">
                 <!-- Filtro Marca -->
                 <div class="filtro-item">
-                    <label for="marca">Marca:</label>
+                    <label for="marca">Família:</label>
                     <select name="marca" id="marca" onchange="this.form.submit()">
                         <option value="">Todas</option>
                         {% for marca in marcas %}
@@ -84,7 +84,7 @@
                     <span class="por">Por: R$ {{ produto.POR }}</span>
                 </div>
 
-                <p class="estoque"><strong>Quantidade:</strong> {{ produto.ESTOQUE }}</p>
+                <p class="estoque"><strong>Estoque:</strong> {{ produto.ESTOQUE }}</p>
             </div>
         </div>
         {% endfor %}
