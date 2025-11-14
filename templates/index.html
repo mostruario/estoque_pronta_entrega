@@ -34,12 +34,9 @@
                     <label for="produto">Produto:</label>
                     <select name="produto" id="produto" onchange="this.form.submit()">
                         <option value="">Todos</option>
-                        {% if filtro_marca %}
-                            {% set produtos_filtrados = df[df['MARCA'] == filtro_marca]['DESCRICAO_PRODUTO'].dropna().unique() | sort %}
-                            {% for produto_option in produtos_filtrados %}
-                                <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
-                            {% endfor %}
-                        {% endif %}
+                        {% for produto_option in produtos_disponiveis %}
+                            <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
@@ -122,4 +119,3 @@
 
 </body>
 </html>
-
