@@ -55,7 +55,7 @@
             {% if produto.IMAGEM_PRODUTO %}
                 <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}" class="zoomable">
             {% else %}
-                <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem" class="zoomable">
+                <img src="{{ url_for('static', filename='IMAGENS_PRODUTOS/SEM IMAGEM.jpg') }}" alt="Sem imagem" class="zoomable">
             {% endif %}
 
             <h2>{{ produto.DESCRICAO_PRODUTO }}</h2>
