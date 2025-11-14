@@ -52,7 +52,11 @@ def index():
 
     # 🔹 Filtro pesquisa
     if pesquisa:
-        df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa)]
+    pesquisa_lower = pesquisa.lower()
+    df_filtrado = df_filtrado[
+        df_filtrado["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa_lower)
+        | df_filtrado["CODIGO_PRODUTO"].astype(str).str.contains(pesquisa, case=False)
+    ]
 
     # 🔹 Monta lista de produtos sem duplicação de código
     produtos = []
