@@ -42,7 +42,6 @@ def index():
     if filtro_marca:
         df_filtrado = df_filtrado[df_filtrado["MARCA"].astype(str) == filtro_marca]
     else:
-        # Marca "Todas": limpar o filtro de produto
         filtro_produto = ""
 
     # 🔹 Produtos disponíveis (dependem da marca)
@@ -50,13 +49,13 @@ def index():
     if filtro_produto:
         df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str) == filtro_produto]
 
-    # 🔹 Filtro pesquisa
+    # 🔹 Filtro pesquisa (CORRIGIDO)
     if pesquisa:
-    pesquisa_lower = pesquisa.lower()
-    df_filtrado = df_filtrado[
-        df_filtrado["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa_lower)
-        | df_filtrado["CODIGO_PRODUTO"].astype(str).str.contains(pesquisa, case=False)
-    ]
+        pesquisa_lower = pesquisa.lower()
+        df_filtrado = df_filtrado[
+            df_filtrado["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa_lower)
+            | df_filtrado["CODIGO_PRODUTO"].astype(str).str.contains(pesquisa_lower)
+        ]
 
     # 🔹 Monta lista de produtos sem duplicação de código
     produtos = []
