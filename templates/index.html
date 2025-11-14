@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <!-- 🔹 Logo no canto superior direito -->
     <div class="logo-container">
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
     </div>
@@ -15,10 +14,9 @@
     <div class="header-container">
         <h1>CATÁLOGO - PRONTA ENTREGA</h1>
 
-        <!-- 🔹 Filtros modernos -->
         <div class="filtros">
             <form method="get" action="/" class="filtros-form">
-                <!-- Filtro Marca -->
+                <!-- Filtro Família -->
                 <div class="filtro-item">
                     <label for="marca">Família:</label>
                     <select name="marca" id="marca" onchange="this.form.submit()">
@@ -29,7 +27,7 @@
                     </select>
                 </div>
 
-                <!-- Filtro Produto (depende da marca) -->
+                <!-- Filtro Produto (depende da família) -->
                 <div class="filtro-item">
                     <label for="produto">Produto:</label>
                     <select name="produto" id="produto" onchange="this.form.submit()">
@@ -66,7 +64,6 @@
                 <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
                 <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
 
-                <!-- 🔹 Medidas apenas se diferentes de 0 -->
                 <p class="info-medidas">
                     {% set medidas = [] %}
                     {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ '%.2f'|format(produto.COMPRIMENTO|float)|replace('.00','')) %}{% endif %}
@@ -76,7 +73,6 @@
                     {{ medidas | join(' | ') }}
                 </p>
 
-                <!-- 🔹 Preços modernos -->
                 <div class="precos">
                     {% if produto.DE %}
                         <span class="de">De: R$ {{ produto.DE }}</span>
@@ -90,14 +86,12 @@
         {% endfor %}
     </div>
 
-    <!-- Modal para zoom -->
     <div id="modal" class="modal">
         <span class="close">&times;</span>
         <img class="modal-content" id="modal-img">
     </div>
 
     <script>
-    // 🔹 Modal zoom
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modal-img");
     const zoomableImages = document.querySelectorAll(".zoomable");
@@ -119,15 +113,13 @@
         }
     });
 
-    // 🔹 Debounce para o campo pesquisa
     let timeout;
     const pesquisaInput = document.getElementById('pesquisa');
-
     pesquisaInput.addEventListener('input', function() {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
             this.form.submit();
-        }, 500); // espera 500ms após digitar
+        }, 500);
     });
     </script>
 
