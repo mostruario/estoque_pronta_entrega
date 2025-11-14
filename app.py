@@ -41,11 +41,11 @@ def index():
     df_filtrado = df.copy()
     if filtro_marca:
         df_filtrado = df_filtrado[df_filtrado["MARCA"].astype(str) == filtro_marca]
+    else:
+        filtro_produto = ""  # reset produto se marca for "Todas"
 
-    # 🔹 Produtos disponíveis para filtro (depende da marca)
+    # 🔹 Filtro produto depende da marca selecionada
     produtos_disponiveis = sorted(df_filtrado["DESCRICAO_PRODUTO"].dropna().unique())
-
-    # 🔹 Filtra produto
     if filtro_produto:
         df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str) == filtro_produto]
 
