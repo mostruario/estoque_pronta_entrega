@@ -18,6 +18,7 @@
         <!-- 🔹 Filtros modernos -->
         <div class="filtros">
             <form method="get" action="/" class="filtros-form">
+                <!-- Filtro Marca -->
                 <div class="filtro-item">
                     <label for="marca">Marca:</label>
                     <select name="marca" id="marca" onchange="this.form.submit()">
@@ -28,6 +29,21 @@
                     </select>
                 </div>
 
+                <!-- Filtro Produto (depende da marca) -->
+                <div class="filtro-item">
+                    <label for="produto">Produto:</label>
+                    <select name="produto" id="produto" onchange="this.form.submit()">
+                        <option value="">Todos</option>
+                        {% if filtro_marca %}
+                            {% set produtos_filtrados = df[df['MARCA'] == filtro_marca]['DESCRICAO_PRODUTO'].dropna().unique() | sort %}
+                            {% for produto_option in produtos_filtrados %}
+                                <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+
+                <!-- Filtro Pesquisar Produto -->
                 <div class="filtro-item">
                     <label for="pesquisa">Pesquisar Produto:</label>
                     <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto" oninput="this.form.submit()">
@@ -37,72 +53,73 @@
     </div>
 
     <div class="container">
-    {% for produto in produtos %}
-    <div class="card">
-        {% if produto.IMAGEM_PRODUTO %}
-            <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}" class="zoomable">
-        {% else %}
-            <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem" class="zoomable">
-        {% endif %}
+        {% for produto in produtos %}
+        <div class="card">
+            {% if produto.IMAGEM_PRODUTO %}
+                <img src="{{ produto.IMAGEM_PRODUTO }}" alt="{{ produto.DESCRICAO_PRODUTO }}" class="zoomable">
+            {% else %}
+                <img src="{{ url_for('static', filename='sem_imagem.png') }}" alt="Sem imagem" class="zoomable">
+            {% endif %}
 
-        <h2>{{ produto.DESCRICAO_PRODUTO }}</h2>
+            <h2>{{ produto.DESCRICAO_PRODUTO }}</h2>
 
-        <div class="info">
-            <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
-            <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
+            <div class="info">
+                <p><strong>Código do Produto:</strong> {{ produto.CODIGO_PRODUTO }}</p>
+                <p><strong>Marca:</strong> {{ produto.MARCA }}</p>
 
-            <!-- 🔹 Medidas apenas se diferentes de 0 -->
-            <p class="info-medidas">
-                {% set medidas = [] %}
-                {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ '%.2f'|format(produto.COMPRIMENTO|float)|replace('.00','')) %}{% endif %}
-                {% if produto.LARGURA|float != 0 %}{% set _ = medidas.append('Larg.: ' ~ '%.2f'|format(produto.LARGURA|float)|replace('.00','')) %}{% endif %}
-                {% if produto.ALTURA|float != 0 %}{% set _ = medidas.append('Alt.: ' ~ '%.2f'|format(produto.ALTURA|float)|replace('.00','')) %}{% endif %}
-                {% if produto.DIAMETRO|float != 0 %}{% set _ = medidas.append('Ø Diâm.: ' ~ '%.2f'|format(produto.DIAMETRO|float)|replace('.00','')) %}{% endif %}
-                {{ medidas | join(' | ') }}
-            </p>
+                <!-- 🔹 Medidas apenas se diferentes de 0 -->
+                <p class="info-medidas">
+                    {% set medidas = [] %}
+                    {% if produto.COMPRIMENTO|float != 0 %}{% set _ = medidas.append('Comp.: ' ~ '%.2f'|format(produto.COMPRIMENTO|float)|replace('.00','')) %}{% endif %}
+                    {% if produto.LARGURA|float != 0 %}{% set _ = medidas.append('Larg.: ' ~ '%.2f'|format(produto.LARGURA|float)|replace('.00','')) %}{% endif %}
+                    {% if produto.ALTURA|float != 0 %}{% set _ = medidas.append('Alt.: ' ~ '%.2f'|format(produto.ALTURA|float)|replace('.00','')) %}{% endif %}
+                    {% if produto.DIAMETRO|float != 0 %}{% set _ = medidas.append('Ø Diâm.: ' ~ '%.2f'|format(produto.DIAMETRO|float)|replace('.00','')) %}{% endif %}
+                    {{ medidas | join(' | ') }}
+                </p>
 
-            <!-- 🔹 Preços modernos -->
-            <div class="precos">
-                {% if produto.DE %}
-                    <span class="de">De: R$ {{ produto.DE }}</span>
-                {% endif %}
-                <span class="por">Por: R$ {{ produto.POR }}</span>
+                <!-- 🔹 Preços modernos -->
+                <div class="precos">
+                    {% if produto.DE %}
+                        <span class="de">De: R$ {{ produto.DE }}</span>
+                    {% endif %}
+                    <span class="por">Por: R$ {{ produto.POR }}</span>
+                </div>
+
+                <p class="estoque"><strong>Quantidade:</strong> {{ produto.ESTOQUE }}</p>
             </div>
-
-            <p class="estoque"><strong>Quantidade:</strong> {{ produto.ESTOQUE }}</p>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 
-<!-- Modal para zoom -->
-<div id="modal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="modal-img">
-</div>
+    <!-- Modal para zoom -->
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modal-img">
+    </div>
 
-<script>
-const modal = document.getElementById("modal");
-const modalImg = document.getElementById("modal-img");
-const zoomableImages = document.querySelectorAll(".zoomable");
+    <script>
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modal-img");
+    const zoomableImages = document.querySelectorAll(".zoomable");
 
-zoomableImages.forEach(img => {
-    img.addEventListener("click", function() {
-        modal.style.display = "block";
-        modalImg.src = this.src;
+    zoomableImages.forEach(img => {
+        img.addEventListener("click", function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+        });
     });
-});
 
-document.querySelector(".close").addEventListener("click", function() {
-    modal.style.display = "none";
-});
-
-modal.addEventListener("click", function(e) {
-    if (e.target === modal) {
+    document.querySelector(".close").addEventListener("click", function() {
         modal.style.display = "none";
-    }
-});
-</script>
+    });
+
+    modal.addEventListener("click", function(e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+    </script>
 
 </body>
 </html>
+

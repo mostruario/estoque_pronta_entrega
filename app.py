@@ -11,10 +11,11 @@ def index():
     if not os.path.exists(EXCEL_FILE):
         return f"Erro: arquivo '{EXCEL_FILE}' não encontrado."
 
+    # 🔹 Lê a planilha, segunda linha como cabeçalho
     df = pd.read_excel(EXCEL_FILE, header=1)
     df.columns = df.columns.str.strip()
 
-    # 🔹 Renomeia apenas o que for usado diretamente
+    # 🔹 Renomeia colunas usadas
     df.rename(columns={
         "DESCRIÇÃO DO PRODUTO": "DESCRICAO_PRODUTO",
         "MARCA": "MARCA",
@@ -26,8 +27,7 @@ def index():
         "POR": "POR",
         "CODIGO DO PRODUTO": "CODIGO_PRODUTO",
         "ESTOQUE DISPONIVEL": "ESTOQUE",
-        "LINK_IMAGEM": "IMAGEM_PRODUTO",
-        "PRODUTO": "PRODUTO"  # coluna nova para o filtro Produto
+        "LINK_IMAGEM": "IMAGEM_PRODUTO"
     }, inplace=True)
 
     # 🔹 Filtros
@@ -35,27 +35,26 @@ def index():
     filtro_produto = request.args.get("produto", "")
     pesquisa = request.args.get("pesquisa", "").lower().strip()
 
-    # Lista de marcas e produtos dinâmicos
     marcas = sorted(df["MARCA"].dropna().unique())
-    
-    # Produtos dependentes da marca selecionada
-    if filtro_marca:
-        df_filtrado = df[df["MARCA"].astype(str) == filtro_marca]
-        produtos_disponiveis = sorted(df_filtrado["PRODUTO"].dropna().unique())
-    else:
-        produtos_disponiveis = sorted(df["PRODUTO"].dropna().unique())
 
-    # Filtrando o DataFrame
+    # 🔹 Filtra marca
+    df_filtrado = df.copy()
     if filtro_marca:
-        df = df[df["MARCA"].astype(str) == filtro_marca]
+        df_filtrado = df_filtrado[df_filtrado["MARCA"].astype(str) == filtro_marca]
+
+    # 🔹 Filtro produto depende da marca selecionada
+    produtos_disponiveis = sorted(df_filtrado["DESCRICAO_PRODUTO"].dropna().unique())
     if filtro_produto:
-        df = df[df["PRODUTO"].astype(str) == filtro_produto]
-    if pesquisa:
-        df = df[df["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa)]
+        df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str) == filtro_produto]
 
+    # 🔹 Filtro pesquisa
+    if pesquisa:
+        df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa)]
+
+    # 🔹 Monta lista de produtos sem duplicação de código
     produtos = []
-    codigos_vistos = set()  # 🔹 Evita duplicação de cards
-    for _, row in df.iterrows():
+    codigos_vistos = set()
+    for _, row in df_filtrado.iterrows():
         codigo_produto = str(row.get("CODIGO_PRODUTO", ""))
         if codigo_produto in codigos_vistos:
             continue
@@ -63,13 +62,11 @@ def index():
 
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
         if imagem_path:
-            nome_imagem = os.path.basename(imagem_path)
-            nome_imagem = nome_imagem.replace("\\", "/").split("/")[-1]
+            nome_imagem = os.path.basename(imagem_path).replace("\\", "/").split("/")[-1]
             imagem_url = url_for('static', filename=f'IMAGENS_PRODUTOS/{nome_imagem}')
         else:
             imagem_url = url_for('static', filename='sem_imagem.png')
 
-        # Formata valores em reais (R$)
         def formatar_real(valor):
             try:
                 valor_float = float(valor)
@@ -80,7 +77,6 @@ def index():
         produtos.append({
             "DESCRICAO_PRODUTO": str(row.get("DESCRICAO_PRODUTO", "")),
             "MARCA": str(row.get("MARCA", "")),
-            "PRODUTO": str(row.get("PRODUTO", "")),
             "COMPRIMENTO": str(row.get("COMPRIMENTO", "")),
             "LARGURA": str(row.get("LARGURA", "")),
             "ALTURA": str(row.get("ALTURA", "")),
@@ -101,6 +97,7 @@ def index():
         filtro_produto=filtro_produto,
         pesquisa=pesquisa
     )
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
