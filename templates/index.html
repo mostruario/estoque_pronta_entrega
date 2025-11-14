@@ -34,16 +34,18 @@
                     <label for="produto">Produto:</label>
                     <select name="produto" id="produto" onchange="this.form.submit()">
                         <option value="">Todos</option>
-                        {% for produto_option in produtos_disponiveis %}
-                            <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
-                        {% endfor %}
+                        {% if filtro_marca %}
+                            {% for produto_option in produtos_disponiveis %}
+                                <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
+                            {% endfor %}
+                        {% endif %}
                     </select>
                 </div>
 
                 <!-- Filtro Pesquisar Produto -->
                 <div class="filtro-item">
                     <label for="pesquisa">Pesquisar Produto:</label>
-                    <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto" oninput="this.form.submit()">
+                    <input type="text" id="pesquisa" name="pesquisa" value="{{ pesquisa }}" placeholder="Digite o nome do produto">
                 </div>
             </form>
         </div>
@@ -95,6 +97,7 @@
     </div>
 
     <script>
+    // 🔹 Modal zoom
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modal-img");
     const zoomableImages = document.querySelectorAll(".zoomable");
@@ -115,8 +118,20 @@
             modal.style.display = "none";
         }
     });
+
+    // 🔹 Debounce para o campo pesquisa
+    let timeout;
+    const pesquisaInput = document.getElementById('pesquisa');
+
+    pesquisaInput.addEventListener('input', function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            this.form.submit();
+        }, 500); // espera 500ms após digitar
+    });
     </script>
 
 </body>
 </html>
+
 
