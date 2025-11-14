@@ -49,7 +49,7 @@ def index():
     if filtro_produto:
         df_filtrado = df_filtrado[df_filtrado["DESCRICAO_PRODUTO"].astype(str) == filtro_produto]
 
-    # 🔹 Filtro pesquisa (CORRIGIDO)
+    # 🔹 Filtro pesquisa (DESCRIÇÃO + CÓDIGO)
     if pesquisa:
         pesquisa_lower = pesquisa.lower()
         df_filtrado = df_filtrado[
@@ -62,10 +62,12 @@ def index():
     codigos_vistos = set()
     for _, row in df_filtrado.iterrows():
         codigo_produto = str(row.get("CODIGO_PRODUTO", ""))
+
         if codigo_produto in codigos_vistos:
             continue
         codigos_vistos.add(codigo_produto)
 
+        # 🔹 Corrige imagem
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
         if imagem_path:
             nome_imagem = os.path.basename(imagem_path).replace("\\", "/").split("/")[-1]
@@ -73,6 +75,7 @@ def index():
         else:
             imagem_url = url_for('static', filename='sem_imagem.png')
 
+        # 🔹 Formata moeda
         def formatar_real(valor):
             try:
                 valor_float = float(valor)
@@ -80,6 +83,14 @@ def index():
             except:
                 return str(valor)
 
+        # 🔹 Formata ESTOQUE como inteiro
+        estoque_valor = row.get("ESTOQUE", "")
+        try:
+            estoque_formatado = str(int(float(estoque_valor)))
+        except:
+            estoque_formatado = str(estoque_valor)
+
+        # 🔹 Adiciona produto
         produtos.append({
             "DESCRICAO_PRODUTO": str(row.get("DESCRICAO_PRODUTO", "")),
             "MARCA": str(row.get("MARCA", "")),
@@ -90,7 +101,7 @@ def index():
             "DE": formatar_real(row.get("DE", "")),
             "POR": formatar_real(row.get("POR", "")),
             "CODIGO_PRODUTO": codigo_produto,
-            "ESTOQUE": str(row.get("ESTOQUE", "")),
+            "ESTOQUE": estoque_formatado,
             "IMAGEM_PRODUTO": imagem_url
         })
 
@@ -108,6 +119,7 @@ def index():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)
+
 
 
 
