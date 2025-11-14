@@ -33,14 +33,21 @@ h1 {
 /* Container de cards */
 .container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* sempre 5 cards por linha */
+    grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
     gap: 20px;
     justify-items: center;
     padding: 30px 15px;
     width: 100%;
-    max-width: 1400px; /* limita o tamanho máximo para não esticar demais */
+    max-width: 1400px;
     margin: 0 auto;
     box-sizing: border-box;
+}
+
+/* Ajuste do gap em telas grandes */
+@media (min-width: 1201px) {
+    .container {
+        gap: 15px 20px; /* 15px entre linhas, 20px entre colunas */
+    }
 }
 
 .card {
