@@ -26,17 +26,30 @@ def index():
         "POR": "POR",
         "CODIGO DO PRODUTO": "CODIGO_PRODUTO",
         "ESTOQUE DISPONIVEL": "ESTOQUE",
-        "LINK_IMAGEM": "IMAGEM_PRODUTO"
+        "LINK_IMAGEM": "IMAGEM_PRODUTO",
+        "PRODUTO": "PRODUTO"  # coluna nova para o filtro Produto
     }, inplace=True)
 
     # 🔹 Filtros
     filtro_marca = request.args.get("marca", "")
+    filtro_produto = request.args.get("produto", "")
     pesquisa = request.args.get("pesquisa", "").lower().strip()
 
+    # Lista de marcas e produtos dinâmicos
     marcas = sorted(df["MARCA"].dropna().unique())
+    
+    # Produtos dependentes da marca selecionada
+    if filtro_marca:
+        df_filtrado = df[df["MARCA"].astype(str) == filtro_marca]
+        produtos_disponiveis = sorted(df_filtrado["PRODUTO"].dropna().unique())
+    else:
+        produtos_disponiveis = sorted(df["PRODUTO"].dropna().unique())
 
+    # Filtrando o DataFrame
     if filtro_marca:
         df = df[df["MARCA"].astype(str) == filtro_marca]
+    if filtro_produto:
+        df = df[df["PRODUTO"].astype(str) == filtro_produto]
     if pesquisa:
         df = df[df["DESCRICAO_PRODUTO"].astype(str).str.lower().str.contains(pesquisa)]
 
@@ -45,7 +58,7 @@ def index():
     for _, row in df.iterrows():
         codigo_produto = str(row.get("CODIGO_PRODUTO", ""))
         if codigo_produto in codigos_vistos:
-            continue  # pula se o código já foi adicionado
+            continue
         codigos_vistos.add(codigo_produto)
 
         imagem_path = str(row.get("IMAGEM_PRODUTO", "")).strip()
@@ -56,7 +69,7 @@ def index():
         else:
             imagem_url = url_for('static', filename='sem_imagem.png')
 
-        # 🔹 Formata valores em reais (R$)
+        # Formata valores em reais (R$)
         def formatar_real(valor):
             try:
                 valor_float = float(valor)
@@ -67,6 +80,7 @@ def index():
         produtos.append({
             "DESCRICAO_PRODUTO": str(row.get("DESCRICAO_PRODUTO", "")),
             "MARCA": str(row.get("MARCA", "")),
+            "PRODUTO": str(row.get("PRODUTO", "")),
             "COMPRIMENTO": str(row.get("COMPRIMENTO", "")),
             "LARGURA": str(row.get("LARGURA", "")),
             "ALTURA": str(row.get("ALTURA", "")),
@@ -82,15 +96,15 @@ def index():
         "index.html",
         produtos=produtos,
         marcas=marcas,
+        produtos_disponiveis=produtos_disponiveis,
         filtro_marca=filtro_marca,
+        filtro_produto=filtro_produto,
         pesquisa=pesquisa
     )
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host="0.0.0.0", port=port)
-
 
 
 
