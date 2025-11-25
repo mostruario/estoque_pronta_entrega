@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MOSTRUÁRIO DIGITAL</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f3f3f3;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            position: relative;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 40px;
+        }
+
+        .header img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            font-size: 32px;
+        }
+
+        /* FILTROS */
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .filtros input,
+        .filtros select {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #aaa;
+            width: 220px;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, 250px);
+            justify-content: center;
+        }
+
+        .card {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: black;
+            box-shadow: 0 0 5px #0003;
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        /* 🔥 BOTÕES MODERNOS E MENORES */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .btn-modern {
+            flex: 1;
+            margin: 0 3px;
+            padding: 6px 0;
+            border-radius: 25px;
+            background: rgba(0,0,0,0.15);
+            text-align: center;
+            color: #fff;
+            font-size: 12px;
+            text-decoration: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-modern:hover {
+            background: rgba(0,0,0,0.25);
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <img src="/static/LOGO CLAMI.png" alt="Logo">
+    <h1>MOSTRUÁRIO DIGITAL</h1>
+</div>
+
+<!-- 🔍 FILTROS -->
+<div class="filtros">
+    <select id="filtroMarca">
+        <option value="">Marca</option>
+        {% for m in marcas %}
+        <option value="{{ m }}">{{ m }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" id="pesquisaProduto" placeholder="Pesquisar Produto">
+</div>
+
+<div class="grid" id="produtosGrid">
+    {% for p in produtos %}
+        <div class="card" data-marca="{{ p.marca }}" data-nome="{{ p.nome|lower }}">
+            <img src="{{ p.imagem }}" alt="Imagem">
+
+            <h3>{{ p.nome }}</h3>
+
+            <!-- 🔥 BOTÕES NOVOS -->
+            <div class="btn-container">
+                <a class="btn-modern" href="/produto/{{ p.nome }}">Acabamentos</a>
+                <a class="btn-modern" href="/download/{{ p.nome }}">PDF</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- SCRIPT DOS FILTROS -->
+<script>
+const busca = document.getElementById("pesquisaProduto");
+const marca = document.getElementById("filtroMarca");
+const cards = document.querySelectorAll(".card");
+
+function filtrar() {
+    let texto = busca.value.toLowerCase();
+    let marcaSelecionada = marca.value;
+
+    cards.forEach(card => {
+        let nome = card.dataset.nome;
+        let marcaCard = card.dataset.marca;
+
+        let matchNome = nome.includes(texto);
+        let matchMarca = marcaSelecionada === "" || marcaSelecionada === marcaCard;
+
+        card.style.display = (matchNome && matchMarca) ? "" : "none";
+    });
+}
+
+busca.addEventListener("input", filtrar);
+marca.addEventListener("change", filtrar);
+</script>
+
+</body>
+</html>
+
+
+
+
+
