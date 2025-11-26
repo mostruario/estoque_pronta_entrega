@@ -23,6 +23,7 @@
                 <div class="filtro-item">
                     <label for="marca">Família:</label>
 
+                    <!-- select permite múltiplas (o script abaixo envia os selecionados em marca_hidden) -->
                     <select name="marca" id="marca" multiple size="1" onchange="submitFamilias()">
                         <option value="Todas"
                             {% if not filtro_marca or 'Todas' in filtro_marca %}selected{% endif %}>
@@ -37,6 +38,7 @@
                         {% endfor %}
                     </select>
 
+                    <!-- campo oculto enviado no GET com a lista separada por vírgula -->
                     <input type="hidden" id="marca_hidden" name="marca_hidden"
                            value="{{ ','.join(filtro_marca) if filtro_marca else '' }}">
                 </div>
@@ -63,11 +65,24 @@
                         <option value="">Todos</option>
                         {% if filtro_marca %}
                             {% for produto_option in produtos_disponiveis %}
-                                <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>{{ produto_option }}</option>
+                                <option value="{{ produto_option }}" {% if produto_option == filtro_produto %}selected{% endif %}>
+                                    {{ produto_option }}
+                                </option>
                             {% endfor %}
                         {% endif %}
                     </select>
                 </div>
+
+                <!-- ⭐⭐⭐ NOVO FILTRO — IMAGEM ⭐⭐⭐ -->
+                <div class="filtro-item">
+                    <label for="imagem">Imagem:</label>
+                    <select name="imagem" id="imagem" onchange="this.form.submit()">
+                        <option value="" {% if not filtro_imagem %}selected{% endif %}>Todos</option>
+                        <option value="com" {% if filtro_imagem == 'com' %}selected{% endif %}>COM IMAGEM</option>
+                        <option value="sem" {% if filtro_imagem == 'sem' %}selected{% endif %}>SEM IMAGEM</option>
+                    </select>
+                </div>
+                <!-- ⭐⭐⭐ FIM DO NOVO FILTRO ⭐⭐⭐ -->
 
                 <!-- Pesquisa -->
                 <div class="filtro-item">
@@ -133,7 +148,7 @@ document.querySelectorAll(".zoomable").forEach(img => {
 document.querySelector(".close").addEventListener("click", () => modal.style.display = "none");
 modal.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 
-/* -------- PESQUISA -------- */
+/* -------- PESQUISA (debounce) -------- */
 let timeout;
 document.getElementById('pesquisa').addEventListener('input', function() {
     clearTimeout(timeout);
@@ -143,8 +158,5 @@ document.getElementById('pesquisa').addEventListener('input', function() {
 
 </body>
 </html>
-
-
-
 
 
